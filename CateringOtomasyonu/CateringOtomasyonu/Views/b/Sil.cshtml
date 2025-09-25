@@ -1,0 +1,32 @@
+﻿@model List<CateringOtomasyonu.Models.VeterinerViewModel>
+@{
+    ViewData["Title"] = "Veteriner Sil";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container my-4">
+    <h3 class="mb-4">Veteriner Sil</h3>
+    @if (TempData["SilMesaji"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SilMesaji"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <ul class="list-group">
+        @foreach (var v in Model)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@v.Ad</strong><br />
+                    <small class="text-muted">@v.Uzmanlik - @v.Aciklama</small>
+                </div>
+                <form asp-action="SilOnay" method="post" onsubmit="return confirm('@v.Ad adlı veterineri silmek istiyor musunuz?');">
+                    <input type="hidden" name="id" value="@v.Id" />
+                    <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                </form>
+            </li>
+        }
+    </ul>
+</div>

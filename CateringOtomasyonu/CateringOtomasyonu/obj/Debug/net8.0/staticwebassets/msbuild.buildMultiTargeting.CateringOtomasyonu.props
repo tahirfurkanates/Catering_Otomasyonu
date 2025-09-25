@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\CateringOtomasyonu.props" />
+</Project>

@@ -1,0 +1,37 @@
+﻿@model List<CateringOtomasyonu.db.IletisimMesajlari>
+
+@{
+    ViewData["Title"] = "İletişim Mesajları";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">İletişim Mesajları</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Henüz mesaj gelmemiş.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Ad Soyad</th>
+                <th>Mesaj</th>
+                <th>Tarih</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td>@m.IletisimId</td>
+                    <td>@m.AdSoyad</td>
+                    <td>@m.Mesaj</td>
+                    <td>@m.Tarih.ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

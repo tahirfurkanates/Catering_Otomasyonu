@@ -1,0 +1,95 @@
+﻿@model CateringOtomasyonu.ViewModels.RandevuAlViewModel
+@{
+    ViewData["Title"] = "Randevu Al";
+    Layout = "~/Views/Shared/_HastaLayout.cshtml";
+    var hayvanlar = ViewBag.Hayvanlar as List<CateringOtomasyonu.dal.Hayvanlar> ?? new List<CateringOtomasyonu.dal.Hayvanlar>();
+    var uzmanliklar = ViewBag.Uzmanliklar as List<string> ?? new List<string>();
+}
+
+<h2 class="mb-4">Randevu Al</h2>
+
+<form method="post" asp-action="RandevuAl">
+    <div class="mb-3">
+        <label>Hayvan</label>
+        <select class="form-select" asp-for="HayvanId" required>
+            <option disabled selected>Seçiniz</option>
+            @foreach (var h in hayvanlar)
+            {
+                <option value="@h.HayvanId">@h.Ad</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Uzmanlık</label>
+        <select class="form-select" id="uzmanlikSelect" required>
+            <option disabled selected>Seçiniz</option>
+            @foreach (var u in uzmanliklar)
+            {
+                <option value="@u">@u</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Doktor</label>
+        <select class="form-select" asp-for="VeterinerId" id="doktorSelect" required>
+            <option disabled selected>Önce uzmanlık seçin</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Tarih</label>
+        <input type="date" asp-for="Tarih" class="form-control" id="tarihInput" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Saat</label>
+        <select class="form-select" asp-for="Saat" id="saatSelect" required>
+            <option disabled selected>Önce tarih seçin</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Şikayet</label>
+        <textarea asp-for="Notlar" class="form-control" rows="3"></textarea>
+    </div>
+
+    <button class="btn btn-primary">Randevu Al</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById('uzmanlikSelect').addEventListener('change', function () {
+            const uzmanlik = this.value;
+            fetch(`/HastaPanel/GetDoktorlar?uzmanlik=${encodeURIComponent(uzmanlik)}`)
+                .then(res => res.json())
+                .then(data => {
+                    const doktorSelect = document.getElementById('doktorSelect');
+                    doktorSelect.innerHTML = '<option disabled selected>Seçiniz</option>';
+                    data.forEach(d => {
+                        doktorSelect.innerHTML += `<option value="${d.veterinerId}">${d.adSoyad}</option>`;
+                    });
+                });
+        });
+
+        document.getElementById('doktorSelect').addEventListener('change', loadSaatler);
+        document.getElementById('tarihInput').addEventListener('change', loadSaatler);
+
+        function loadSaatler() {
+            const doktorId = document.getElementById('doktorSelect').value;
+            const tarih = document.getElementById('tarihInput').value;
+            if (!doktorId || !tarih) return;
+
+            fetch(`/HastaPanel/GetBosSaatler?veterinerId=${doktorId}&tarih=${tarih}`)
+                .then(res => res.json())
+                .then(data => {
+                    const saatSelect = document.getElementById('saatSelect');
+                    saatSelect.innerHTML = '<option disabled selected>Seçiniz</option>';
+                    data.forEach(s => {
+                        saatSelect.innerHTML += `<option value="${s}">${s}</option>`;
+                    });
+                });
+        }
+    </script>
+}

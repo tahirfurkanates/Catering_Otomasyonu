@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="card p-4 shadow-sm">
+    <h5 class="mb-3">Toplu Görsel Yükle</h5>
+
+    @if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mesaj"]</div>
+    }
+    @if (TempData["Uyari"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Uyari"]</div>
+    }
+
+    <form method="post" enctype="multipart/form-data" asp-action="TopluResimYukle" asp-controller="Menu">
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label class="form-label">Görseller (birden çok seçebilirsiniz)</label>
+            <input type="file" name="files" class="form-control" multiple accept=".jpg,.jpeg,.png,.webp" />
+            <div class="form-text">
+                Dosya adında ürün <b>ID</b> geçmeli. Örn: <code>67.png</code>, <code>67-alkolsuz.jpg</code>, <code>menu67.webp</code>…
+                Yüklediğiniz dosya <code>wwwroot/img/menu/&lt;ID&gt;.ext</code> olarak kaydedilir.
+            </div>
+        </div>
+        <button class="btn btn-primary">Yükle</button>
+    </form>
+</div>

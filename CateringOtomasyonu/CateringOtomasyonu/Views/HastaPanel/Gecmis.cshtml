@@ -1,0 +1,36 @@
+﻿@model List<CateringOtomasyonu.dal.Randevular>
+@{
+    ViewData["Title"] = "Randevu Geçmişi";
+    Layout = "~/Views/Shared/_HastaLayout.cshtml"; // ya da null
+}
+
+<h2>Randevu Geçmişi</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Henüz bir randevu geçmişiniz bulunmamaktadır.</div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>Saat</th>
+                <th>Veteriner</th>
+                <th>Notlar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.Tarih?.ToString("dd.MM.yyyy")</td>
+                    <td>@r.Tarih?.ToString("HH:mm")</td>
+                    <td>@r.Veteriner?.Ad @r.Veteriner?.Soyad</td>
+                    <td>@r.Notlar</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

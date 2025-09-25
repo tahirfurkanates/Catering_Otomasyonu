@@ -1,0 +1,31 @@
+﻿@model List<CateringOtomasyonu.dal.Hayvanlar>
+@{
+    ViewData["Title"] = "Hayvanlarım";
+    Layout = "~/Views/Shared/_HastaLayout.cshtml";
+}
+
+<h2 class="mb-4">Hayvanlarım</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Kayıtlı hayvanınız bulunmamaktadır.</div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var h in Model)
+        {
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">@h.Ad</h5>
+                        <p class="card-text mb-1"><strong>Tür:</strong> @h.Tur</p>
+                        <p class="card-text mb-1"><strong>Irk:</strong> @h.Irk</p>
+                        <p class="card-text mb-1"><strong>Cinsiyet:</strong> @h.Cinsiyet</p>
+                        <p class="card-text mb-1"><strong>Doğum Tarihi:</strong> @h.DogumTarihi?.ToString("dd.MM.yyyy")</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,54 @@
+﻿@model VeterinerKullaniciViewModel
+@{
+    ViewData["Title"] = "Veteriner ve Kullanıcı Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <h3 class="mb-4">Veteriner ve Kullanıcı Ekle</h3>
+
+    @if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mesaj"]</div>
+    }
+
+    <form asp-action="Ekle" method="post">
+        <h5>Veteriner Bilgileri</h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Ad</label>
+                <input asp-for="Ad" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Soyad</label>
+                <input asp-for="Soyad" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Telefon</label>
+                <input asp-for="Telefon" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Email</label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+            <div class="col-md-12 mb-3">
+                <label>Uzmanlık</label>
+                <input asp-for="Uzmanlik" class="form-control" />
+            </div>
+        </div>
+
+        <h5 class="mt-4">Giriş Bilgileri</h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Kullanıcı Adı</label>
+                <input asp-for="KullaniciAdi" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Şifre</label>
+                <input asp-for="Sifre" class="form-control" />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    </form>
+</div>

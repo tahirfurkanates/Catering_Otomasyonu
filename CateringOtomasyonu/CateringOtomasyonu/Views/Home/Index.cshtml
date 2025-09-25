@@ -1,0 +1,178 @@
+﻿@using CateringOtomasyonu.db
+@{
+    ViewData["Title"] = "Catering";
+
+    // Ürün listesi: ViewModel yoksa ViewBag'den gelir
+    var items = (IEnumerable<MenuOgeleri>)(Model?.PopulerMenuOgeleri
+                 ?? ViewBag.MenuOgeleri
+                 ?? new List<MenuOgeleri>());
+}
+
+<!-- HERO (fotoğrafsız, gradient) -->
+<header class="home-hero">
+    <div class="container py-5">
+        <div class="row align-items-center g-4 py-lg-5">
+            <div class="col-lg-7">
+                <h1 class="display-5 fw-bold lh-1 mb-3">Her güne <span class="gradient-text">taze lezzet</span></h1>
+                <p class="lead text-muted">Toplantı, davet ve ofis yemekleri için şef dokunuşuyla hazırlanmış menüler. Hızlı teslimat, kusursuz sunum.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-primary btn-lg" asp-fragment="menu" asp-controller="Home" asp-action="Index">Menüyü Keşfet</a>
+                    @* HERO'daki "Davet Oluştur" kaldırıldı *@
+                </div>
+                <div class="tiny-perks">
+                    <span>⚡ 30 dk teslim</span><span>🧼 Hijyen garantisi</span><span>🥗 Özel diyetler</span>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="hero-stats">
+                    <div class="stat"><div class="v">4.9</div><div class="k">Müşteri Puanı</div></div>
+                    <div class="stat"><div class="v">+12k</div><div class="k">Aylık Porsiyon</div></div>
+                    <div class="stat"><div class="v">24/7</div><div class="k">Servis</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-blob a"></div>
+    <div class="hero-blob b"></div>
+</header>
+
+<!-- MENÜ (sınırsız ürün) -->
+<section id="menu" class="section-padding">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-3">
+            <div>
+                <h2 class="section-title m-0">Menümüz</h2>
+                <div class="text-muted">Sadece bu bölümde ürün fotoğrafı kullanılır.</div>
+            </div>
+            @* Sağdaki Davet Oluştur / Sepetim butonları kaldırıldı *@
+        </div>
+
+        @if (items == null || !items.Any())
+        {
+            <div class="alert alert-info">Şu an görüntülenecek menü bulunamadı.</div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var m in items)
+                {
+                    var slug = (m.Ad ?? "")
+                    .ToLowerInvariant()
+                    .Replace(" ", "-")
+                    .Replace("/", "-")
+                    .Replace(".", "-");
+
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <div class="card h-100 shadow-sm menu-card">
+                            <div class="ratio ratio-16x9 rounded-top overflow-hidden">
+                                <a asp-controller="Menu" asp-action="Details" asp-route-id="@m.MenuOgeleriId" asp-route-slug="@slug">
+                                    <img class="object-fit-cover w-100 h-100"
+                                         src="@Url.Content($"~/img/menu/{m.MenuOgeleriId}.png")"
+                                         data-id="@m.MenuOgeleriId"
+                                         alt="@m.Ad"
+                                         onerror="imgFallback(this)" />
+                                </a>
+                            </div>
+
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h5 class="card-title pe-2 m-0">
+                                        <a class="stretched-link text-decoration-none link-ink"
+                                           asp-controller="Menu" asp-action="Details"
+                                           asp-route-id="@m.MenuOgeleriId" asp-route-slug="@slug">
+                                            @m.Ad
+                                        </a>
+                                    </h5>
+                                    <span class="price-badge">@(((decimal?)m.BirimFiyat ?? 0m).ToString("c"))</span>
+                                </div>
+
+                                <p class="card-text text-muted small flex-grow-1">
+                                    @(string.IsNullOrWhiteSpace(m.Aciklama) ? "Şefimizin özel tarifi." : m.Aciklama)
+                                </p>
+
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <a class="btn btn-outline-primary"
+                                       asp-controller="Siparis" asp-action="Ekle" asp-route-id="@m.MenuOgeleriId">
+                                        Sepete Ekle
+                                    </a>
+                                    <span class="text-muted small">⚡ Hızlı teslim</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<!-- HAKKINDA -->
+<section id="about" class="section-padding bg-body-tertiary">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <h2 class="section-title">Neden Biz?</h2>
+                <p class="text-muted">Malzeme kalitesi, hijyen ve zamanında teslimat önceliğimiz. Kurumsal ve bireysel tüm ihtiyaçlara uygun esnek menüler.</p>
+                <div class="row g-3">
+                    <div class="col-sm-6"><div class="chip">🌿 Taze & Mevsimsel</div></div>
+                    <div class="col-sm-6"><div class="chip">🥗 Diyet Uyumlu</div></div>
+                    <div class="col-sm-6"><div class="chip">⏱️ Zamanında Teslim</div></div>
+                    <div class="col-sm-6"><div class="chip">💸 Sürpriz Masraf Yok</div></div>
+                </div>
+                @* Buradaki Davet Oluştur & Siparişlerim butonları kaldırıldı *@
+            </div>
+            <div class="col-lg-6">
+                <div class="about-grid">
+                    <div class="a-item"><span>ISO 22000</span><small>Gıda güvenliği</small></div>
+                    <div class="a-item"><span>+50</span><small>Kurumsal müşteri</small></div>
+                    <div class="a-item"><span>Chef</span><small>Deneyimli kadro</small></div>
+                    <div class="a-item"><span>24/7</span><small>Destek</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- GERİ BİLDİRİM -->
+<section id="feedback" class="section-padding">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="section-title">Öneri & Şikayet</h2>
+            <p class="text-muted">Geri bildiriminiz bizim için değerli.</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form class="card shadow-sm p-4 rounded-4" method="post" asp-controller="Feedback" asp-action="Gonder">
+                    @Html.AntiForgeryToken()
+                    @if (TempData["FeedbackOk"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["FeedbackOk"]</div>
+                    }
+                    @if (TempData["FeedbackErr"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["FeedbackErr"]</div>
+                    }
+                    <div class="row g-3">
+                        <div class="col-md-6"><label class="form-label">Ad Soyad</label><input class="form-control" name="adSoyad" required /></div>
+                        <div class="col-md-6"><label class="form-label">E-posta</label><input type="email" class="form-control" name="email" /></div>
+                        <div class="col-12"><label class="form-label">Mesaj</label><textarea rows="4" class="form-control" name="mesaj" required></textarea></div>
+                    </div>
+                    <div class="text-end mt-3"><button class="btn btn-primary">Gönder</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<footer class="footer border-top bg-body">
+    <div class="container py-4 d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div class="text-muted small">© @DateTime.Now.Year Catering Otomasyonu</div>
+        <div class="d-flex gap-3 small">
+            <a class="link-secondary" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+            <a class="link-secondary" asp-fragment="menu" asp-controller="Home" asp-action="Index">Menü</a>
+            <a class="link-secondary" asp-controller="Davet" asp-action="Olustur">Davet</a>
+            <a class="link-secondary" asp-controller="Siparis" asp-action="Sepet">Sepet</a>
+        </div>
+    </div>
+</footer>

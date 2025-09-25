@@ -1,0 +1,42 @@
+﻿@model List<CateringOtomasyonu.db.Personeller>
+@{
+    ViewData["Title"] = "Aşçı Listesi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container-fluid py-3">
+    <h2 class="mb-3">Aşçı Listesi</h2>
+
+    @if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mesaj"]</div>
+    }
+
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Ad Soyad</th>
+                <th>E-posta</th>
+                <th>Telefon</th>
+                <th>Görev</th>
+                <th class="text-end">İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td class="fw-semibold">@a.Ad @a.Soyad</td>
+                    <td>@a.Email</td>
+                    <td>@a.Telefon</td>
+                    <td>@(string.IsNullOrWhiteSpace(a.Gorev) ? "Aşçı" : a.Gorev)</td>
+                    <td class="text-end">
+                        <a asp-controller="Asci" asp-action="Guncelle" asp-route-id="@a.PersonelId"
+                           class="btn btn-sm btn-outline-warning">
+                            <i class="bi bi-pencil-square"></i> Güncelle
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

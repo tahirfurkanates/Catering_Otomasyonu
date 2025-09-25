@@ -1,0 +1,200 @@
+﻿@model CateringOtomasyonu.ViewModels.RandevuAlViewModel
+@{
+    ViewData["Title"] = "Randevularım";
+    Layout = "~/Views/Shared/_HastaLayout.cshtml";
+    var aktif = ViewBag.AktifRandevular as List<CateringOtomasyonu.dal.Randevular>;
+    var gecmis = ViewBag.GecmisRandevular as List<CateringOtomasyonu.dal.Randevular>;
+    var asiListAll = ViewBag.Asilar as List<CateringOtomasyonu.dal.Asilar> ?? new();
+    var tedaviListAll = ViewBag.Tedaviler as List<CateringOtomasyonu.dal.Tedaviler> ?? new();
+}
+
+<h2 class="mb-4">Aktif Randevular</h2>
+@if (!aktif.Any())
+{
+    <div class="alert alert-warning">Aktif randevunuz bulunmamaktadır.</div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var r in aktif)
+        {
+            var asiList = asiListAll
+            .Where(a => a.HayvanId == r.HayvanId &&
+            a.YapilmaTarihi.HasValue &&
+            r.Tarih.HasValue &&
+            a.YapilmaTarihi.Value.Date == r.Tarih.Value.Date)
+            .ToList();
+
+
+            var tedaviList = tedaviListAll
+            .Where(t => t.HayvanId == r.HayvanId &&
+            t.Tarih.HasValue &&
+            r.Tarih.HasValue &&
+            t.Tarih.Value.Date == r.Tarih.Value.Date)
+            .ToList();
+
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5>@r.Hayvan?.Ad</h5>
+                        <p><strong>Tür:</strong> @r.Hayvan?.Tur</p>
+                        <p><strong>Tarih:</strong> @r.Tarih?.ToString("dd.MM.yyyy HH:mm")</p>
+                        <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#asiModal-@r.RandevuId">Aşı Bilgisi</button>
+                        <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#tedaviModal-@r.RandevuId">Tedavi Bilgisi</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aşı Modal -->
+            <div class="modal fade" id="asiModal-@r.RandevuId" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header"><h5 class="modal-title">Aşı Bilgisi</h5></div>
+                        <div class="modal-body">
+                            @if (asiList.Any())
+                            {
+                                <ul class="list-group">
+                                    @foreach (var asi in asiList)
+                                    {
+                                        <li class="list-group-item">
+                                            <strong>@asi.AsiAdi</strong> – @(asi.YapilmaTarihi.Value.ToString("dd.MM.yyyy"))
+                                            @if (asi.SonrakiTarih.HasValue)
+                                            {
+                                                <div><small>Sonraki: @asi.SonrakiTarih.Value.ToString("dd.MM.yyyy")</small></div>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p>Bu randevuya ait aşı bilgisi bulunmamaktadır.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tedavi Modal -->
+            <div class="modal fade" id="tedaviModal-@r.RandevuId" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header"><h5 class="modal-title">Tedavi Bilgisi</h5></div>
+                        <div class="modal-body">
+                            @if (tedaviList.Any())
+                            {
+                                <ul class="list-group">
+                                    @foreach (var tedavi in tedaviList)
+                                    {
+                                        <li class="list-group-item">
+                                            @(tedavi.Tarih.Value.ToString("dd.MM.yyyy")) – @tedavi.Aciklama
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p>Bu randevuya ait tedavi bilgisi bulunmamaktadır.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<h2 class="mt-5 mb-4">Geçmiş Randevular</h2>
+@if (!gecmis.Any())
+{
+    <div class="alert alert-secondary">Geçmiş randevunuz bulunmamaktadır.</div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var r in gecmis)
+        {
+            var asiList = asiListAll
+            .Where(a => a.HayvanId == r.HayvanId &&
+            a.YapilmaTarihi.HasValue &&
+            r.Tarih.HasValue &&
+            a.YapilmaTarihi.Value.Date == r.Tarih.Value.Date)
+            .ToList();
+
+            var tedaviList = tedaviListAll
+            .Where(t => t.HayvanId == r.HayvanId &&
+            t.Tarih.HasValue &&
+            r.Tarih.HasValue &&
+            t.Tarih.Value.Date == r.Tarih.Value.Date)
+            .ToList();
+
+            <div class="col-md-6">
+                <div class="card shadow-sm bg-light">
+                    <div class="card-body">
+                        <h5>@r.Hayvan?.Ad</h5>
+                        <p><strong>Tür:</strong> @r.Hayvan?.Tur</p>
+                        <p><strong>Tarih:</strong> @r.Tarih?.ToString("dd.MM.yyyy HH:mm")</p>
+                        <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#asiModal-@r.RandevuId">Aşı Bilgisi</button>
+                        <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#tedaviModal-@r.RandevuId">Tedavi Bilgisi</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aşı Modal -->
+            <div class="modal fade" id="asiModal-@r.RandevuId" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header"><h5 class="modal-title">Aşı Bilgisi</h5></div>
+                        <div class="modal-body">
+                            @if (asiList.Any())
+                            {
+                                <ul class="list-group">
+                                    @foreach (var asi in asiList)
+                                    {
+                                        <li class="list-group-item">
+                                            <strong>@asi.AsiAdi</strong> – @(asi.YapilmaTarihi.Value.ToString("dd.MM.yyyy"))
+                                            @if (asi.SonrakiTarih.HasValue)
+                                            {
+                                                <div><small>Sonraki: @asi.SonrakiTarih.Value.ToString("dd.MM.yyyy")</small></div>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p>Bu randevuya ait aşı bilgisi bulunmamaktadır.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tedavi Modal -->
+            <div class="modal fade" id="tedaviModal-@r.RandevuId" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header"><h5 class="modal-title">Tedavi Bilgisi</h5></div>
+                        <div class="modal-body">
+                            @if (tedaviList.Any())
+                            {
+                                <ul class="list-group">
+                                    @foreach (var tedavi in tedaviList)
+                                    {
+                                        <li class="list-group-item">
+                                            @(tedavi.Tarih.Value.ToString("dd.MM.yyyy")) – @tedavi.Aciklama
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p>Bu randevuya ait tedavi bilgisi bulunmamaktadır.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

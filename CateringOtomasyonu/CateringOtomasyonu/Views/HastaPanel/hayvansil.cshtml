@@ -1,0 +1,51 @@
+﻿@model List<CateringOtomasyonu.dal.Hayvanlar>
+@{
+    ViewData["Title"] = "Hayvan Sil";
+    Layout = "~/Views/Shared/_HastaLayout.cshtml";
+}
+
+<h2 class="mb-4">Hayvan Sil</h2>
+@if (TempData["Mesaj"] != null)
+{
+    <div class="alert alert-success">@TempData["Mesaj"]</div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Kayıtlı hayvan bulunmamaktadır.</div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Ad</th>
+                <th>Tür</th>
+                <th>Irk</th>
+                <th>Cinsiyet</th>
+                <th>Doğum Tarihi</th>
+                <th>İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var h in Model)
+            {
+                <tr>
+                    <td>@h.Ad</td>
+                    <td>@h.Tur</td>
+                    <td>@h.Irk</td>
+                    <td>@h.Cinsiyet</td>
+                    <td>@h.DogumTarihi?.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        <form asp-action="HayvanSil" method="post" onsubmit="return confirm('Bu hayvanı silmek istediğinize emin misiniz?')">
+                            <input type="hidden" name="id" value="@h.HayvanId" />
+                            <button class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i> Sil
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

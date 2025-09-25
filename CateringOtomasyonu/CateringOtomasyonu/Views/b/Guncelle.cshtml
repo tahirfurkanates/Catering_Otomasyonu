@@ -1,0 +1,43 @@
+﻿@model List<CateringOtomasyonu.Models.VeterinerGuncelleViewModel>
+
+@{
+    ViewData["Title"] = "Veteriner Güncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Veteriner Güncelle</h2>
+@if (TempData["GuncelleMesaji"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["GuncelleMesaji"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>Uzmanlık</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <form asp-action="Guncelle" method="post">
+                    <input type="hidden" name="VeterinerId" value="@item.VeterinerId" />
+                <td><input name="Ad" value="@item.Ad" class="form-control" /></td>
+                <td><input name="Soyad" value="@item.Soyad" class="form-control" /></td>
+                <td><input name="Telefon" value="@item.Telefon" class="form-control" /></td>
+                <td><input name="Email" value="@item.Email" class="form-control" /></td>
+                <td><input name="Uzmanlik" value="@item.Uzmanlik" class="form-control" /></td>
+                <td><button type="submit" class="btn btn-primary">Güncelle</button></td>
+                </form>
+            </tr>
+        }
+    </tbody>
+</table>

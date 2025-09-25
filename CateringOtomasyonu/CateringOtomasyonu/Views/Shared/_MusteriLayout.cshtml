@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>@ViewData["Title"] - Hasta Panel</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+	<style>
+		.admin-sidebar {
+			width: 280px;
+			min-height: 100vh;
+			background-color: #f8f9fa;
+			border-right: 1px solid #ddd;
+		}
+
+		.admin-content {
+			margin-left: 220px;
+			padding: 20px;
+		}
+
+		.sidebar-link {
+			display: block;
+			padding: 10px 20px;
+			color: #333;
+			text-decoration: none;
+		}
+
+			.sidebar-link:hover {
+				background-color: #e9ecef;
+				text-decoration: none;
+			}
+	</style>
+</head>
+<body>
+
+	<!-- Üst Bar -->
+	<div class="d-flex justify-content-end align-items-center px-4 py-2 bg-dark text-white">
+		<div class="dropdown">
+			<button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+				<i class="bi bi-person-circle me-2"></i>@Context.Session.GetString("KullaniciAdi")
+			</button>
+			<ul class="dropdown-menu dropdown-menu-end">
+				<li><a class="dropdown-item" href="/Login/Cikis">Çıkış Yap</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="d-flex">
+		<!-- Sidebar -->
+		<div class="admin-sidebar">
+			<h5 class="text-center py-3 border-bottom">Hasta Menü</h5>
+
+			<a href="/hastapanel" class="sidebar-link">
+				<i class="bi bi-speedometer2 me-2"></i>Panel
+			</a>
+			<a href="/hastapanel/Profil" class="sidebar-link">
+				<i class="bi bi-speedometer2 me-2"></i>Profil
+			</a>
+
+
+			<!-- Kullanıcılar açılır menü -->
+			<button class="sidebar-link w-100 text-start d-flex justify-content-between align-items-center"
+					data-bs-toggle="collapse"
+					data-bs-target="#kullaniciMenu"
+					aria-expanded="false"
+					aria-controls="kullaniciMenu">
+
+				<span class="d-inline-flex align-items-center">
+					<i class="bi bi-people me-2"></i>
+					Hayvan İşlemleri
+				</span>
+
+				<i class="bi bi-chevron-down"></i>
+			</button>
+
+			<div class="collapse ps-3" id="kullaniciMenu">
+				<a href="/HastaPanel/hayvanEkle" class="sidebar-link">➕ Hayvan Ekle</a>
+				<a href="/HastaPanel/hayvanSil" class="sidebar-link">🗑 Hayvan Sil</a>
+				<a href="/HastaPanel/hayvanlistele" class="sidebar-link">
+					<i class="bi bi-card-list me-2"></i>Hayvan Listele
+				</a>
+
+			</div>
+			<a href="/HastaPanel/randevularim" class="sidebar-link">
+				<i class="bi bi-hospital me-2"></i>randevular
+			</a>
+
+
+		</div>
+
+		<!-- İçerik -->
+		<div class="admin-content w-100">
+			@RenderBody()
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	@RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,42 @@
+﻿@model CateringOtomasyonu.ViewModels.DavetEditVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="card p-3 shadow-sm">
+    <h5 class="mb-3">Davet Düzenle (#@Model.EtkinlikId)</h5>
+
+    <form asp-action="Duzenle" method="post" class="row g-3">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="EtkinlikId" />
+
+        <div class="col-md-4">
+            <label class="form-label">Başlangıç</label>
+            <input asp-for="Baslangic" type="datetime-local" step="1" class="form-control" />
+            <span class="text-danger" asp-validation-for="Baslangic"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Bitiş</label>
+            <input asp-for="Bitis" type="datetime-local" step="1" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Konum</label>
+            <input asp-for="Konum" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Durum</label>
+            <input asp-for="Durum" class="form-control" placeholder="Örn: Beklemede, Onaylandı, Tamamlandı" />
+        </div>
+
+        <div class="col-12 d-flex gap-2">
+            <a class="btn btn-outline-secondary" asp-action="Listele">Geri</a>
+            <button class="btn btn-primary">Kaydet</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

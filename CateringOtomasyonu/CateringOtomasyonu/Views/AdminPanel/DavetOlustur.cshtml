@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Davet Oluştur";
+    var role = HttpContextAccessor.HttpContext?.Session?.GetString("Role");
+    Layout = role == "Admin" ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_Layout.cshtml";
+
+    var bas = (string)(ViewBag.BaslangicVarsayilan ?? DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"));
+    var bit = (string)(ViewBag.BitisVarsayilan ?? DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm:ss"));
+    var ascilar = ViewBag.Ascilar as List<SelectListItem> ?? new List<SelectListItem>();
+}
+<div class="container py-3">
+    <h2 class="mb-3">Davet Oluştur</h2>
+
+    @if (TempData["Uyari"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Uyari"]</div>
+    }
+    @if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mesaj"]</div>
+    }
+
+    <form asp-action="Olustur" asp-controller="Davet" method="post" class="row g-3">
+        @Html.AntiForgeryToken()
+
+        <div class="col-md-4">
+            <label for="Baslangic" class="form-label">Başlangıç</label>
+            <input id="Baslangic" name="Baslangic" type="datetime-local" step="1" class="form-control" value="@bas" />
+        </div>
+
+        <div class="col-md-4">
+            <label for="Bitis" class="form-label">Bitiş</label>
+            <input id="Bitis" name="Bitis" type="datetime-local" step="1" class="form-control" value="@bit" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Aşçı(lar)</label>
+            <select class="form-select" name="AsciIds" multiple size="6">
+                @foreach (var a in ascilar)
+                {
+                    <option value="@a.Value">@a.Text</option>
+                }
+            </select>
+            <div class="form-text">Çoklu seçim için Ctrl/Shift.</div>
+        </div>
+
+        <div class="col-12">
+            <div class="alert alert-info small mb-0">
+                Yalnızca tarih/saat kaydedilir. Diğer alanlar ve <b>Durum</b> otomatik <b>NULL</b>.
+            </div>
+        </div>
+
+        <div class="col-12 mt-2">
+            <a asp-controller="Siparis" asp-action="Siparislerim" class="btn btn-outline-secondary">Siparişlerim</a>
+            <button type="submit" class="btn btn-info">Kaydet</button>
+        </div>
+    </form>
+</div>

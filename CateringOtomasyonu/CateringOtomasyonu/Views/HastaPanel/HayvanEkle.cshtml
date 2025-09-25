@@ -1,0 +1,44 @@
+﻿@model CateringOtomasyonu.ViewModels.HayvanEkleViewModel
+@{
+    ViewData["Title"] = "Hayvan Ekle";
+    Layout = "~/Views/Shared/_HastaLayout.cshtml";
+}
+
+<h2 class="mb-4">Hayvan Ekle</h2>
+@if (ViewBag.Mesaj != null)
+{
+    <div class="alert alert-success">@ViewBag.Mesaj</div>
+}
+
+<form method="post" asp-action="HayvanEkle">
+    <div class="mb-3">
+        <label>Ad</label>
+        <input asp-for="Ad" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Tür</label>
+        <input asp-for="Tur" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Irk</label>
+        <input asp-for="Irk" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Cinsiyet</label>
+        <select asp-for="Cinsiyet" class="form-select" required>
+            <option disabled selected>Seçiniz</option>
+            <option value="Erkek">Erkek</option>
+            <option value="Dişi">Dişi</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Doğum Tarihi</label>
+        <input asp-for="DogumTarihi" class="form-control" type="date" />
+    </div>
+
+    <button class="btn btn-primary">Ekle</button>
+</form>

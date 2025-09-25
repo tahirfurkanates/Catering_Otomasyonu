@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section Styles {
+    <style>
+        .kpi {
+            border: 1px solid rgba(15,23,42,.08);
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(2,8,23,.06);
+        }
+
+            .kpi h2 {
+                font-weight: 800;
+            }
+    </style>
+}
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="p-3 kpi">
+            <div class="text-muted small">Toplam Menü</div>
+            <h2>@ViewBag.ToplamMenu</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-3 kpi">
+            <div class="text-muted small">Toplam Davet</div>
+            <h2>@ViewBag.ToplamDavet</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-3 kpi">
+            <div class="text-muted small">Bugünkü Davet</div>
+            <h2>@ViewBag.BugunDavet</h2>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 d-flex flex-wrap gap-2">
+    <a class="btn btn-primary" asp-controller="Davet" asp-action="Listele">📅 Davetleri Listele</a>
+    <a class="btn btn-outline-secondary" asp-controller="Feedback" asp-action="Listele">💬 Öneri & Şikayetler</a>
+</div>

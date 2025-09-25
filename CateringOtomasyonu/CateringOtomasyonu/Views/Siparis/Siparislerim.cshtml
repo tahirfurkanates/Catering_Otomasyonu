@@ -1,0 +1,46 @@
+﻿@model List<CateringOtomasyonu.Models.SiparisListeVM>
+@{
+    ViewData["Title"] = "Siparişlerim";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4 m-0">Siparişlerim</h1>
+        <a class="btn btn-success" asp-controller="Davet" asp-action="Olustur">Yeni Davet Oluştur</a>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">Henüz bir siparişiniz bulunmuyor.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Başlangıç</th>
+                        <th>Bitiş</th>
+                        <th>Konum</th>
+                        <th class="text-end">Kişi</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in Model)
+                    {
+                        <tr>
+                            <td>@s.EtkinlikId</td>
+                            <td>@s.Baslangic.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@s.Bitis.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@s.Konum</td>
+                            <td class="text-end">@((s.KisiSayisi?.ToString()) ?? "-")</td>
+                            <td>@s.Durum</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

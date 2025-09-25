@@ -1,0 +1,295 @@
+﻿/* =========================================================
+   Catering Otomasyonu — Tüm Sayfa Stilleri (home.css)
+   - iPhone/SF sistem fontu
+   - Cam efektli navbar
+   - Tek tip “brand” butonları (Sepet/Giriş/Kayıt Ol/Çıkış)
+   - Fotoğraf sadece menü kartlarında
+   ========================================================= */
+
+/* ---------- Temel Değişkenler ---------- */
+:root {
+    /* Tema renkleri */
+    --brand: #0d6efd; /* Ana */
+    --brand-2: #0aa2ff; /* Işık */
+    --brand-dark: #0b5ed7; /* Hover */
+    --ink: #0f172a; /* Metin */
+    --muted: #6b7280; /* Soluk metin */
+    --border: rgba(15,23,42,.08);
+    --glass: rgba(255,255,255,.72);
+    --shadow: 0 10px 30px rgba(2,8,23,.08);
+}
+
+/* ---------- Global ---------- */
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+.glass-nav {
+    background: var(--glass);
+    backdrop-filter: saturate(1.2) blur(10px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.brand-dot {
+    display: inline-block;
+    width: .7rem;
+    height: .7rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg,var(--brand),var(--brand-2));
+    margin-right: .4rem;
+    box-shadow: 0 0 0 .18rem rgba(13,110,253,.15);
+}
+
+.navbar .nav-link {
+    position: relative;
+    font-weight: 500;
+    color: #334155;
+}
+
+    .navbar .nav-link:hover {
+        color: var(--ink);
+    }
+
+    .navbar .nav-link::after {
+        content: "";
+        position: absolute;
+        left: .4rem;
+        right: .4rem;
+        bottom: -6px;
+        height: 2px;
+        transform: scaleX(0);
+        transform-origin: left;
+        background: var(--brand);
+        transition: transform .25s ease;
+    }
+
+    .navbar .nav-link:hover::after {
+        transform: scaleX(1);
+    }
+
+/* ----- Sağ blok butonları (Sepet/Giriş/Kayıt/Çıkış) ----- */
+.nav-btn {
+    border-radius: 14px;
+    padding: .48rem .9rem;
+    font-weight: 700;
+    letter-spacing: .2px;
+    transition: transform .12s ease, box-shadow .12s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+/* Dolu stil — hepsi aynı görünümde */
+.btn-brand {
+    background: linear-gradient(135deg,var(--brand),var(--brand-2));
+    color: #fff !important;
+    border: 1px solid rgba(13,110,253,.35);
+    box-shadow: 0 6px 16px rgba(13,110,253,.18);
+}
+
+    .btn-brand:hover {
+        background: linear-gradient(135deg,var(--brand-dark),var(--brand));
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(13,110,253,.28);
+    }
+
+    .btn-brand:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 12px rgba(13,110,253,.22);
+    }
+
+/* Outline varyant (istersen Çıkış’ta kullan) */
+.btn-brand-outline {
+    background: transparent;
+    color: var(--brand) !important;
+    border: 1.5px solid var(--brand);
+    box-shadow: none;
+}
+
+    .btn-brand-outline:hover {
+        background: rgba(13,110,253,.08);
+        color: var(--brand) !important;
+    }
+
+/* Sepet rozeti */
+.badge-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: #ef4444;
+    color: #fff;
+    font-size: .72rem;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 999px;
+    border: 2px solid #fff;
+    min-width: 22px;
+    text-align: center;
+}
+
+/* =========================================================
+   HERO (fotoğrafsız, gradient + blur bloblar)
+   ========================================================= */
+.home-hero {
+    position: relative;
+    background: linear-gradient(135deg,#f7fbff 0%,#fefeff 60%,#ffffff 100%);
+}
+
+.hero-blob {
+    position: absolute;
+    filter: blur(60px);
+    opacity: .6;
+    z-index: 0;
+}
+
+    .hero-blob.a {
+        width: 260px;
+        height: 260px;
+        background: #c9e8ff;
+        top: -60px;
+        right: -40px;
+        border-radius: 50%;
+    }
+
+    .hero-blob.b {
+        width: 220px;
+        height: 220px;
+        background: #ffe1e1;
+        bottom: -40px;
+        left: -40px;
+        border-radius: 50%;
+    }
+
+.gradient-text {
+    background: linear-gradient(90deg,#0ea5e9,#6366f1,#22c55e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.tiny-perks {
+    display: flex;
+    gap: .8rem;
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: .95rem;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+    .hero-stats .stat {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 14px 18px;
+        min-width: 130px;
+        box-shadow: var(--shadow);
+        text-align: center;
+    }
+
+    .hero-stats .v {
+        font-weight: 800;
+        font-size: 1.75rem;
+        letter-spacing: .3px;
+    }
+
+    .hero-stats .k {
+        color: var(--muted);
+        font-size: .85rem;
+    }
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+.section-padding {
+    padding: 72px 0;
+}
+
+.section-title {
+    font-weight: 800;
+    letter-spacing: .2px;
+}
+
+/* =========================================================
+   MENÜ KARTLARI (fotoğraf sadece burada)
+   ========================================================= */
+.menu-card img {
+    transition: transform .4s ease;
+}
+
+.menu-card:hover img {
+    transform: scale(1.03);
+}
+
+.price-badge {
+    background: #0d6efd10;
+    color: var(--brand);
+    border: 1px solid #0d6efd30;
+    padding: .25rem .55rem;
+    border-radius: 999px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   HAKKINDA (ikonik grid, fotoğrafsız)
+   ========================================================= */
+.chip {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: .5rem .8rem;
+    background: #fff;
+    display: inline-block;
+    box-shadow: var(--shadow);
+    font-weight: 600;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 12px;
+}
+
+.a-item {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+}
+
+    .a-item span {
+        font-weight: 800;
+        font-size: 1.4rem;
+    }
+
+    .a-item small {
+        color: var(--muted);
+    }
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.footer {
+    backdrop-filter: saturate(1.1);
+}
+/* ====== Ürün Detay ====== */
+.product-hero{ background:linear-gradient(135deg,#f8fbff 0%,#fff 60%); }
+.product-gallery img{ max-height:460px; object-fit:cover; display:block; }
+.product-highs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
+.link-ink{ color:#111827; }
+.link-ink:hover{ color:#0d6efd; }
+.product-card:hover img{ transform:scale(1.03); transition:transform .35s ease; }

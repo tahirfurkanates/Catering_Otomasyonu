@@ -1,0 +1,26 @@
+﻿@model CateringOtomasyonu.db.Personeller
+
+<div class="modal-header">
+    <h5 class="modal-title">Silme Onayı</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+</div>
+
+<form asp-action="Sil" asp-controller="Asci" asp-route-id="@Model.PersonelId" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body">
+        <p>
+            <strong>@Model.Ad @Model.Soyad</strong> kaydını silmek istediğine emin misin?
+        </p>
+        <div class="alert alert-warning mb-0">
+            Bu işlem geri alınamaz.
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Vazgeç</button>
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Sil
+        </button>
+    </div>
+</form>

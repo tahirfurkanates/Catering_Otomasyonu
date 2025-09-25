@@ -1,0 +1,32 @@
+﻿@model List<CateringOtomasyonu.dal.Veterinerler>
+
+@{
+    ViewData["Title"] = "Veteriner Listesi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Veterinerler</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>Uzmanlık</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var v in Model)
+        {
+            <tr>
+                <td>@v.Ad</td>
+                <td>@v.Soyad</td>
+                <td>@v.Telefon</td>
+                <td>@v.Email</td>
+                <td>@v.Uzmanlik</td>
+            </tr>
+        }
+    </tbody>
+</table>

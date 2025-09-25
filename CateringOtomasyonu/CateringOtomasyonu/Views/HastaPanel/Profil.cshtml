@@ -1,0 +1,44 @@
+﻿@model CateringOtomasyonu.ViewModels.HastaProfilViewModel
+@{
+    ViewData["Title"] = "Profilim";
+    Layout = "~/Views/Shared/_HastaLayout.cshtml";
+}
+
+<h2>Profil Bilgilerim</h2>
+
+@if (TempData["basari"] != null)
+{
+    <div class="alert alert-success">@TempData["basari"]</div>
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label>Adres</label>
+        <textarea class="form-control" asp-for="Adres"></textarea>
+    </div>
+    <div class="mb-3">
+        <label>E-Posta</label>
+        <input class="form-control" asp-for="Email" type="email" />
+    </div>
+    <div class="mb-3">
+        <label>Telefon</label>
+        <input class="form-control" asp-for="Telefon" type="text" />
+    </div>
+
+    <hr />
+    <h5>Şifre Değiştir</h5>
+    <div class="mb-3">
+        <label>Mevcut Şifre</label>
+        <input class="form-control" asp-for="EskiSifre" type="password" />
+    </div>
+    <div class="mb-3">
+        <label>Yeni Şifre</label>
+        <input class="form-control" asp-for="YeniSifre" type="password" />
+    </div>
+    <div class="mb-3">
+        <label>Yeni Şifre (Tekrar)</label>
+        <input class="form-control" asp-for="YeniSifreTekrar" type="password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>

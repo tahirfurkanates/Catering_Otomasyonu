@@ -1,0 +1,121 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Davet Oluştur";
+    var role = Context?.Session?.GetString("Role");
+    Layout = role == "Admin" ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_Layout.cshtml";
+
+    var bas = (string)(ViewBag.BaslangicVarsayilan ?? DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"));
+    var bit = (string)(ViewBag.BitisVarsayilan ?? DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm:ss"));
+    var ascilar = ViewBag.Ascilar as List<SelectListItem> ?? new List<SelectListItem>();
+}
+
+@section Styles {
+    <!-- Select2 (etiketli, aramalı çoklu seçim) -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .form-card {
+            border: 1px solid rgba(15,23,42,.08);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(2,8,23,.06);
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .select2-container--default .select2-selection--multiple {
+            border: 1px solid #ced4da;
+            min-height: calc(1.5em + .75rem + 2px);
+            padding: .25rem .5rem;
+            border-radius: .475rem;
+        }
+
+            .select2-container--default .select2-selection--multiple .select2-selection__choice {
+                background: #eef4ff;
+                border: 1px solid #cfe0ff;
+                color: #0d47a1;
+                padding: 2px 8px;
+                border-radius: 999px;
+            }
+    </style>
+}
+
+<div class="container py-3">
+    <h2 class="mb-3">Davet Oluştur</h2>
+
+    @if (TempData["Uyari"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Uyari"]</div>
+    }
+    @if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mesaj"]</div>
+    }
+
+    <form asp-action="Olustur" asp-controller="Davet" method="post" class="row g-3 form-card p-3">
+        @Html.AntiForgeryToken()
+
+        <div class="col-md-4">
+            <label for="Baslangic" class="form-label">Başlangıç</label>
+            <input id="Baslangic" name="Baslangic" type="datetime-local" step="1" class="form-control" value="@bas" required />
+        </div>
+
+        <div class="col-md-4">
+            <label for="Bitis" class="form-label">Bitiş</label>
+            <input id="Bitis" name="Bitis" type="datetime-local" step="1" class="form-control" value="@bit" required />
+        </div>
+
+        <div class="col-md-4">
+            <label for="Konum" class="form-label">Konum</label>
+            <input id="Konum" name="Konum" type="text" class="form-control" placeholder="Adres veya mekan adı"
+                   list="konum-oneriler" required />
+            <datalist id="konum-oneriler">
+                <option value="İstanbul, Beşiktaş"></option>
+                <option value="İstanbul, Kadıköy"></option>
+                <option value="Ankara, Çankaya"></option>
+                <option value="İzmir, Karşıyaka"></option>
+                <option value="Ofis - Toplantı Odası"></option>
+                <option value="Açık Hava - Teras"></option>
+            </datalist>
+            <div class="form-text">Şehir/ilçe veya açık adres girebilirsiniz.</div>
+        </div>
+
+        <div class="col-12">
+            <label for="AsciIds" class="form-label">Aşçı(lar)</label>
+            <select id="AsciIds" name="AsciIds" class="form-select" multiple>
+                @foreach (var a in ascilar)
+                {
+                    <option value="@a.Value">@a.Text</option>
+                }
+            </select>
+            <div class="form-text">Çoklu seçim desteklenir. İsim aratabilirsiniz.</div>
+        </div>
+
+        <div class="col-12">
+            <div class="alert alert-info small mb-0">
+                Yalnızca tarih/saat ve <b>Konum</b> zorunludur. Diğer alanlar ve <b>Durum</b> otomatik <b>NULL</b>.
+            </div>
+        </div>
+
+        <div class="col-12 mt-2 d-flex gap-2">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Geri</a>
+            <button type="submit" class="btn btn-info">Kaydet</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <!-- Select2 JS (jQuery yüklü olmalı; _Layout'ta var) -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(function () {
+          $('#AsciIds').select2({
+            placeholder: 'Aşçı seçin',
+            width: '100%',
+            closeOnSelect: false,
+            allowClear: true
+          });
+        });
+    </script>
+}

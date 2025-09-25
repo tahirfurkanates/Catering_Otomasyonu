@@ -1,0 +1,88 @@
+﻿@model List<CateringOtomasyonu.db.Personeller>
+@{
+    ViewData["Title"] = "Aşçı Sil";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container-fluid py-3">
+    <h2 class="mb-3">Aşçı Sil</h2>
+
+    @if (TempData["Uyari"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Uyari"]</div>
+    }
+    @if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mesaj"]</div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th class="text-end" style="width: 120px;">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model == null || !Model.Any())
+                        {
+                            <tr><td colspan="2" class="text-center text-muted py-4">Kayıt yok.</td></tr>
+                        }
+                        else
+                        {
+                            foreach (var a in Model)
+                            {
+                                <tr id="row-@a.PersonelId">
+                                    <td class="fw-semibold">@a.Ad @a.Soyad</td>
+                                    <td class="text-end">
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-danger"
+                                                data-delete-id="@a.PersonelId">
+                                            <i class="bi bi-trash"></i> Sil
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Modal: içerik JS ile partial'dan yüklenecek -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Sil butonuna tıklanınca onay partial'ını getir ve modalda göster
+        document.addEventListener('click', async (e) => {
+            const btn = e.target.closest('[data-delete-id]');
+            if (!btn) return;
+            const id = btn.getAttribute('data-delete-id');
+
+            const url = '@Url.Action("DeletePartial", "Asci")' + '/' + id;
+
+            try {
+                const resp = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                if (!resp.ok) throw new Error('Onay ekranı yüklenemedi.');
+                const html = await resp.text();
+
+                const modalContent = document.querySelector('#deleteModal .modal-content');
+                modalContent.innerHTML = html;
+
+                const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                modal.show();
+            } catch (err) {
+                alert(err.message);
+            }
+        });
+    </script>
+}

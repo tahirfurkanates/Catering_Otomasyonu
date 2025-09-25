@@ -1,0 +1,51 @@
+﻿@model CateringOtomasyonu.db.Personeller
+
+<div class="modal-header">
+    <h5 class="modal-title">Aşçı Güncelle — @Model.Ad @Model.Soyad</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+</div>
+
+<form asp-action="Guncelle"
+      asp-controller="Asci"
+      asp-route-id="@Model.PersonelId"
+      method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body">
+        <div class="row g-3">
+            <input type="hidden" asp-for="PersonelId" />
+
+            <div class="col-md-6">
+                <label asp-for="Ad" class="form-label"></label>
+                <input asp-for="Ad" class="form-control" />
+                <span asp-validation-for="Ad" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Soyad" class="form-label"></label>
+                <input asp-for="Soyad" class="form-control" />
+                <span asp-validation-for="Soyad" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Telefon" class="form-label"></label>
+                <input asp-for="Telefon" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Gorev" class="form-label"></label>
+                <input asp-for="Gorev" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Vazgeç</button>
+        <button type="submit" class="btn btn-warning">Güncelle</button>
+    </div>
+</form>

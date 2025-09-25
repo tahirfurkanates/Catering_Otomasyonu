@@ -1,0 +1,117 @@
+﻿@model CateringOtomasyonu.ViewModels.MuayeneViewModel
+
+@{
+    ViewData["Title"] = "Muayene Ekranı";
+    Layout = "~/Views/Shared/_VeterinerLayout.cshtml";
+}
+
+<div class="card shadow p-4">
+    <h4 class="mb-3">Muayene Bilgisi</h4>
+
+    <dl class="row">
+        <dt class="col-sm-3">Hayvan Adı:</dt>
+        <dd class="col-sm-9">@Model.HayvanAdi</dd>
+
+        <dt class="col-sm-3">Tür:</dt>
+        <dd class="col-sm-9">@Model.Tur</dd>
+
+        <dt class="col-sm-3">Irk:</dt>
+        <dd class="col-sm-9">@Model.Irk</dd>
+
+        <dt class="col-sm-3">Randevu Tarihi:</dt>
+        <dd class="col-sm-9">@Model.Tarih?.ToString("dd.MM.yyyy HH:mm")</dd>
+
+        <dt class="col-sm-3">Açıklama:</dt>
+        <dd class="col-sm-9">@Model.Notlar</dd>
+    </dl>
+
+    <div class="d-flex gap-2 mb-3">
+        <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#asiModal">Aşı Ekle</button>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tedaviModal">Tedavi Ekle</button>
+        <button type="button" class="btn btn-danger" onclick="tamamlaMuayene(@ViewBag.RandevuId)">Muayeneyi Tamamla</button>
+    </div>
+</div>
+
+<!-- Aşı Modal -->
+<div class="modal fade" id="asiModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="AsiEkle">
+                <div class="modal-header">
+                    <h5 class="modal-title">Aşı Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="HayvanId" value="@Model.HayvanId" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Aşı Adı</label>
+                        <input type="text" class="form-control" name="AsiAdi" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Yapılma Tarihi</label>
+                        <input type="date" class="form-control" name="YapilmaTarihi" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sonraki Tarih</label>
+                        <input type="date" class="form-control" name="SonrakiTarih" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Tedavi Modal -->
+<div class="modal fade" id="tedaviModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="TedaviEkle">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tedavi Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="HayvanId" value="@Model.HayvanId" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Reçete ve Tahlil</label>
+                        <textarea class="form-control" name="Aciklama" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function tamamlaMuayene(randevuId) {
+        fetch('/VeterinerPanel/MuayeneyiTamamla', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'randevuId=' + randevuId
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                window.location.href = '/VeterinerPanel/Index'; // ✅ alert sonrası yönlendirme
+            } else {
+                alert("Hata: " + data.message);
+            }
+        })
+        .catch(error => {
+            alert("İşlem sırasında bir hata oluştu.");
+            console.error(error);
+        });
+    }
+</script>
